@@ -1,40 +1,37 @@
-from django.db.models import Count
-from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
-import datetime
-import openpyxl
+# apps\remote_user\views.py
 
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-from sklearn.pipeline import Pipeline
-
-#to data preprocessing
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder
-
-#NLP tools
 import re
 import nltk
-nltk.download('stopwords')
-nltk.download('rslp')
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+
+from django.db.models import Count, Q
+from django.shortcuts import render, redirect, get_object_or_404
+
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import svm
+
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-from sklearn.feature_extraction.text import CountVectorizer
-
-#train split and fit models
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
 from nltk.tokenize import TweetTokenizer
-from sklearn.ensemble import VotingClassifier
-#model selection
-from sklearn.metrics import confusion_matrix, accuracy_score, plot_confusion_matrix, classification_report
-# Create your views here.
-from Remote_User.models import ClientRegister_Model,Spam_Prediction,detection_ratio,detection_accuracy
+
+from apps.remote_user.models import (
+    ClientRegister_Model,
+    Spam_Prediction,
+    detection_ratio,
+    detection_accuracy
+)
 
 def login(request):
 
@@ -95,9 +92,7 @@ def Predict_IOT_Message_Type(request):
         data = pd.read_csv("IOT_Datasets.csv")
         # data.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-        mapping = {'ham': 0,
-                   'spam': 1
-                   }
+        mapping = {'ham': 0, 'spam': 1}
         data['Results'] = data['Label'].map(mapping)
 
         x = data['Message']

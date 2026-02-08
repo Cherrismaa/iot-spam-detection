@@ -1,5 +1,5 @@
 """
-WSGI config for an_efficient_spam_detection project.
+WSGI config for efficient-spam-detection project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,5 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'an_efficient_spam_detection.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
 application = get_wsgi_application()

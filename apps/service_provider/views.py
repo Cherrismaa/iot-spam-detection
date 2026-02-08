@@ -1,47 +1,27 @@
+# apps\service_provider\views.py
 
-from django.db.models import  Count, Avg
+from django.db.models import Count, Avg, Q
 from django.shortcuts import render, redirect
-from django.db.models import Count
-from django.db.models import Q
-import datetime
-import xlwt
 from django.http import HttpResponse
+import xlwt
+import pandas as pd
 import numpy as np
 
-
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-from sklearn.pipeline import Pipeline
-
-#to data preprocessing
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder
-
-#NLP tools
-import re
-import nltk
-nltk.download('stopwords')
-nltk.download('rslp')
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
 from sklearn.feature_extraction.text import CountVectorizer
-
-#train split and fit models
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from nltk.tokenize import TweetTokenizer
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 from sklearn.ensemble import VotingClassifier
-#model selection
-from sklearn.metrics import confusion_matrix, accuracy_score, plot_confusion_matrix, classification_report
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import svm
 
-# Create your views here.
-from Remote_User.models import ClientRegister_Model,Spam_Prediction,detection_ratio,detection_accuracy
-
+from apps.service_provider.models import (
+    ClientRegister_Model,
+    Spam_Prediction,
+    detection_ratio,
+    detection_accuracy
+)
 
 def serviceproviderlogin(request):
     if request.method  == "POST":
@@ -49,45 +29,41 @@ def serviceproviderlogin(request):
         password = request.POST.get('password')
         if admin == "Admin" and password =="Admin":
             detection_accuracy.objects.all().delete()
-            return redirect('View_Remote_Users')
+            return redirect('View_remote_users')
 
     return render(request,'SProvider/serviceproviderlogin.html')
 
 def View_IOTMessage_Type_Ratio(request):
     detection_ratio.objects.all().delete()
-    rratio = ""
-    kword = 'Spam'
-    print(kword)
-    obj = Spam_Prediction.objects.all().filter(Q(Prediction=kword))
-    obj1 = Spam_Prediction.objects.all()
-    count = obj.count();
-    count1 = obj1.count();
-    ratio = (count / count1) * 100
-    if ratio != 0:
-        detection_ratio.objects.create(names=kword, ratio=ratio)
 
-    ratio1 = ""
-    kword1 = 'Normal'
-    print(kword1)
-    obj1 = Spam_Prediction.objects.all().filter(Q(Prediction=kword1))
-    obj11 = Spam_Prediction.objects.all()
-    count1 = obj1.count();
-    count11 = obj11.count();
-    ratio1 = (count1 / count11) * 100
-    if ratio1 != 0:
-        detection_ratio.objects.create(names=kword1, ratio=ratio1)
+    total_count = Spam_Prediction.objects.count()
 
+    if total_count == 0:
+        return render(request, 'SProvider/View_IOTMessage_Type_Ratio.html', {'objs': []})
+
+    spam_count = Spam_Prediction.objects.filter(Prediction='Spam').count()
+    normal_count = Spam_Prediction.objects.filter(Prediction='Normal').count()
+
+    spam_ratio = (spam_count / total_count) * 100
+    normal_ratio = (normal_count / total_count) * 100
+
+    detection_ratio.objects.create(names='Spam', ratio=spam_ratio)
+    detection_ratio.objects.create(names='Normal', ratio=normal_ratio)
 
     obj = detection_ratio.objects.all()
     return render(request, 'SProvider/View_IOTMessage_Type_Ratio.html', {'objs': obj})
 
-def View_Remote_Users(request):
-    obj=ClientRegister_Model.objects.all()
-    return render(request,'SProvider/View_Remote_Users.html',{'objects':obj})
+def View_remote_users(request):
+    obj = ClientRegister_Model.objects.all()
+    return render(request, 'SProvider/View_Remote_Users.html'
+, {'objects': obj})
 
 def ViewTrendings(request):
-    topic = Spam_Prediction.objects.values('topics').annotate(dcount=Count('topics')).order_by('-dcount')
-    return  render(request,'SProvider/ViewTrendings.html',{'objects':topic})
+    topic = Spam_Prediction.objects.values('Prediction').annotate(
+        dcount=Count('Prediction')
+    ).order_by('-dcount')
+
+    return render(request, 'SProvider/ViewTrendings.html', {'objects': topic})
 
 def charts(request,chart_type):
     chart1 = detection_ratio.objects.values('names').annotate(dcount=Avg('ratio'))
@@ -138,9 +114,7 @@ def train_model(request):
     data = pd.read_csv("IOT_Datasets.csv")
     # data.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-    mapping = {'ham': 0,
-               'spam': 1
-               }
+    mapping = {'ham': 0,'spam': 1}
     data['Results'] = data['Label'].map(mapping)
 
     x = data['Message']
@@ -152,7 +126,7 @@ def train_model(request):
     print(x)
     print(y)
 
-    x = cv.fit_transform(data['Message'].apply(lambda x: np.str_(x)))
+    x = cv.fit_transform(data['Message'].astype(str))
 
     models = []
     from sklearn.model_selection import train_test_split
@@ -234,7 +208,6 @@ def train_model(request):
 
     labeled = 'Processed_data.csv'
     data.to_csv(labeled, index=False)
-    data.to_markdown
 
     obj = detection_accuracy.objects.all()
     return render(request,'SProvider/train_model.html', {'objs': obj})

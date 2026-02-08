@@ -1,0 +1,90 @@
+spam-detection/
+│
+├── manage.py
+├── Readme.md
+├── .gitignore
+├── db.sqlite3
+├── IOT_Datasets.csv
+├── Processed_data.csv
+│
+├── apps/
+│   │
+│   ├── remote_user/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   ├── views.py
+│   │   │
+│   │   ├── migrations/
+│   │   │   └── (migration files present)
+│   │   │
+│   │   └── __pycache__/
+│   │
+│   └── service_provider/
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── models.py
+│       ├── tests.py
+│       ├── views.py
+│       │
+│       ├── migrations/
+│       │   └── (migration files present)
+│       │
+│       └── __pycache__/
+│
+├── config/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── __pycache__/
+│
+├── templates/
+│   │
+│   ├── remote_user/
+│   │   ├── Add_DataSet_Details.html
+│   │   ├── design.html
+│   │   ├── login.css
+│   │   ├── login.html
+│   │   ├── Predict_IOT_Message_Type.html
+│   │   ├── ratings.html
+│   │   ├── Register1.html
+│   │   └── ViewYourProfile.html
+│   │
+│   └── service_provider/
+│       ├── charts.html
+│       ├── charts1.html
+│       ├── design1.html
+│       ├── dislikeschart.html
+│       ├── Download_Trained_DataSets.html
+│       ├── likeschart.html
+│       ├── serviceproviderlogin.html
+│       ├── train_model.html
+│       ├── View_IOTMessage_Type_Ratio.html
+│       ├── View_Prediction_Of_IOTMessage_Type.html
+│       └── View_Remote_Users.html
+│
+├── static/
+│   │
+│   ├── css/
+│   │   └── (empty or available CSS files)
+│   │
+│   ├── js/
+│   │   └── (JavaScript files if present)
+│   │
+│   └── images/
+│       ├── bg.jpg
+│       ├── Login.jpg
+│       ├── Login1.jpg
+│       └── Register.jpg
+│
+└── venv/
+    ├── Include/
+    ├── Lib/
+    ├── Scripts/
+    └── tcl/

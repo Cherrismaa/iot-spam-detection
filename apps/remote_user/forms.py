@@ -1,6 +1,6 @@
 from django import forms
 
-from Remote_User.models import ClientRegister_Model
+from apps.remote_user.models import ClientRegister_Model
 
 
 class ClientRegister_Form(forms.ModelForm):
