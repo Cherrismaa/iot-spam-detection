@@ -190,6 +190,21 @@ Make sure you have:
    http://127.0.0.1:8000/
 
 ---
+## What you can do as an admin:
+
+- Train machine learning models  
+- View classification ratios  
+- Download Excel reports  
+- View prediction history  
+
+---
+
+## 🧠 Notes & Recommendations
+
+- Do **not** place `nltk.download()` calls inside views — NLTK data should be downloaded once via a terminal session.
+- For large datasets or production deployment, reuse trained models instead of retraining on every request.
+- This project is intended for educational and demonstration purposes.
+---
 ## 📌 Usage
 
 ### User Interface
@@ -205,19 +220,12 @@ Log in with:
  ```bash
 Username: Admin
 Password: Admin
----
-
-## What you can do as an admin:
-
-- Train machine learning models  
-- View classification ratios  
-- Download Excel reports  
-- View prediction history  
 
 ---
 
-## 🧠 Notes & Recommendations
+##📫 Author
 
-- Do **not** place `nltk.download()` calls inside views — NLTK data should be downloaded once via a terminal session.
-- For large datasets or production deployment, reuse trained models instead of retraining on every request.
-- This project is intended for educational and demonstration purposes.
+Cherrismaa
+GitHub: https://github.com/Cherrismaa
+
+Portfolio: https://cherrismaa.github.io/Cherrismaa-Portfolio/
