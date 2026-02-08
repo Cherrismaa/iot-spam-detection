@@ -1,29 +1,21 @@
-# Virtual Environment
-venv/
-env/
-ENV/
+# IDE
+.idea/
+*.iml
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Dataset
+*.csv
+*.rar
 
-# Django
-db.sqlite3
-*.log
-media/
+# Database
+*.sql
 
 # ML Models
 *.pkl
 
-# VS Code
-.vscode/
+# Python cache
+__pycache__/
+*.pyc
 
-# System Files
-.DS_Store
-Thumbs.db
-
-# Dataset (optional if large)
-data/raw/
-data/processed/
+# Virtual Environment
+venv/
+env/
